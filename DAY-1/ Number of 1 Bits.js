@@ -67,6 +67,7 @@ console.log(numberOf1Bits(10000));
 console.log(numberOf1Bits(100000));
 
 // Solution-2: Bit Manipulation
+// Note -  If you haven't studies bit manipulation, you can skip this solution.
 
 function numberOf1Bits2(A) {
     let count = 0;
