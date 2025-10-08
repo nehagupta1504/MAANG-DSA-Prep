@@ -72,6 +72,8 @@ Explanation 2:
     return pairs%mod;
  }
  differentBitsSumPairwise([1,3,5])
-
- // Time Complexity - O(n) , where n is length of Array for each bit we're traversing the array so n*32 overall O(n)
- // Space Complexity - O(1)
+ 
+// Time Complexity: O(n)
+//    → For each of 32 bits, we traverse the array once (32 * n = O(n))
+// Space Complexity: O(1)
+//    → Uses only a few variables, no extra space dependent on n
