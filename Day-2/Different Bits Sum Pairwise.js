@@ -72,3 +72,6 @@ Explanation 2:
     return pairs%mod;
  }
  differentBitsSumPairwise([1,3,5])
+
+ // Time Complexity - O(n) , where n is length of Array for each bit we're traversing the array so n*32 overall O(n)
+ // Space Complexity - O(1)
