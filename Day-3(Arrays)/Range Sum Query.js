@@ -59,6 +59,14 @@
     The sum of all elements of A[1 ... 2] = 2 + 2 = 4.
 */
 
+/* 
+---- ------- Brute Force Method ---- -------
+To calculate sum for each query and time complexity for that would be O(n*q)
+for q querries we're traversing n elements in worst case each time
+
+*/
+
+// Optimised Version
 
 function rangeSumQuery(A, B){
     let prefixSum = findPrefixSum(A);
@@ -94,3 +102,12 @@ console.log(rangeSumQuery([1, 2, 3, 4, 5],[[0, 3]]));
 // Total - O(n+q) 
 
 // Space Complexity - O(n) to store prefixSum array values
+
+
+/*
+    ------------- More Optimised Version in terms of Space Complexity -----------------
+   You can modify existing array to make it a prefix sum array but then the original array will be lost or you have to do some extra
+   operations to recover it 
+   // So before proceeding with this step make sure to confirm with your interviewer
+
+*/
