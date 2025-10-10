@@ -1,4 +1,6 @@
 /*
+# Difficulty Level - Medium
+
 # Problem Description
 
     Given an array A of size N, find the subarray of size B with the least average.
@@ -86,3 +88,6 @@ function findSumOfSubArraySizeB(arr, window){
 }
 
 console.log(leastAverage([3, 7, 90, 20, 10, 50, 40], 3))
+
+// Time Complexity - O(n)
+// Space Complexity - O(k) -  where k is the window size
