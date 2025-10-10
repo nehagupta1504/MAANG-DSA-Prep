@@ -88,3 +88,6 @@ function findContributionOfIthNumber(arr, i){
 
 console.log(sumofAllSubArrays([1, 2, 3]));
 console.log(sumofAllSubArrays([2, 1, 3]));
+
+// Time Complexity - O(N)
+// Space Complexity: O(1)
