@@ -1,4 +1,6 @@
 /*
+# Difficulty Level - Easy
+
 # Problem Description
 
     Given an array A of length N. Also given are integers B and C.

@@ -65,4 +65,37 @@
     Remove the first element and the last 3 elements. So we get 2 + 4 + 2 + 1 = 9
 */
 
-// Brute Force: Find all possible combination of B length 
+// Brute Force: Find all possible combination of B length and then find the sum
+// Time Complexity - If there are B elements then we have to find B+1 combinations, for each combination we have to find the sum of B elements - O(B^2)
+
+
+// Optimal Approach - Prefix Sum
+
+function pickFromBothSides(A, B){
+    let n = A.length;
+    let ps = [];
+    // calculate prefix sum
+    for(let i=0; i <A.length; i++){
+        if(i ==0 ) ps[i] = A[i];
+        else ps[i] = ps[i-1] + A[i];
+    }
+    // now find the combinations for ex - if B=2
+    /*
+        Front Back
+          2    0
+          1    1
+          0    2
+    */
+   let front = B;
+   let maxSum = Number.MIN_SAFE_INTEGER;
+   while(front >= 0){
+        let back = B-front;
+        let sum = (front == 0 ? 0 : ps[front-1]) + (back == n ? ps[n-1]: ps[n-1]- ps[n-1-back]);
+        maxSum = Math.max(sum, maxSum)
+        front--;
+   }
+   return maxSum;
+}
+
+// Time Complexity - O(n)
+// Space Complexity - O(n)

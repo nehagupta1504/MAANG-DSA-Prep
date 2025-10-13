@@ -50,3 +50,29 @@
     Removing arr[2] from the given array modifies arr[] to { 1, 1 } such that arr[0] = arr[1] 
     Therefore, the required output is 3.
 */
+
+function specialIndex(A){
+    let oddPs = new Array(A.length).fill(0), evenPs =new Array(A.length).fill(0);
+    for(let i =0; i<A.length ; i++){
+        if(i==0){
+            evenPs[0] = A[0];
+        }else{                // even index
+            evenPs[i] = i%2==0 ? evenPs[i-1] + A[i]: evenPs[i-1];
+            oddPs[i] = i%2!=0 ? oddPs[i-1] + A[i]: oddPs[i-1];
+        }
+    }
+    let count= 0;
+    let n= A.length;
+    for(let i=0; i<A.length; i++){
+        let os = (i!=0 ? oddPs[i-1] : 0)+  evenPs[n-1] - evenPs[i] ;
+        let es = (i!=0 ? evenPs[i-1] : 0) + oddPs[n-1] - oddPs[i];
+        if(os == es){
+            count++;
+        }
+    }
+
+    return count;
+}
+
+// Time Complexity - O(n)
+// Space Complexity - O(n)
