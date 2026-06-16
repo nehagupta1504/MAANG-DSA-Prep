@@ -51,7 +51,7 @@ Example 2
 */
 
 
-// Solution
+// Solution I
 
 class Solution {
     minFallingPathSum(matrix) {
@@ -86,5 +86,35 @@ Time Complexity
 
 Space Complexity
     O(n^2) to store the dp table of size n*n, where n is the number of rows.
+
+*/
+
+// Solution II
+class Solution {
+    minTriangleSum(triangle) {
+      let m = triangle.length;
+      let dp = Array.from({ length: 2 }, () => new Array(m).fill(Infinity));
+  
+      dp[(m - 1)%2] = [...triangle[m - 1]];
+  
+      for (let i = m - 2; i >= 0; i--) {
+        let colSize = triangle[i].length;
+        for (let j = 0; j < colSize; j++) {
+          dp[i%2][j] = triangle[i][j] + Math.min(dp[(i + 1)%2][j], dp[(i + 1)%2][j + 1]);
+        }
+      }
+      return dp[0][0];
+    }
+  }
+
+/* 
+
+Complexity Analysis
+  
+Time Complexity
+  O(n^2) where n is the number of rows in the triangle. The algorithm uses a nested loop where the outer loop runs n times and the inner loop runs proportional to the number of elements in each row (1 to n), resulting in a summation 1 + 2 + ... + n = n(n+1)/2.
+  
+Space Complexity
+  O(n) where n is the number of rows in the triangle. The DP table is initialized as a 2 x n array, providing constant row access with space complexity proportional to the width of the base of the triangle.
 
 */
