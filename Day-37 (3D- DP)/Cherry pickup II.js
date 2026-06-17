@@ -144,8 +144,68 @@ Optimal answer
 for both robots together.
 */
 
+// Solution I (Memoisation)
+class Solution {
+    solve(grid, i, j1, j2, dp) {
+      let n = grid.length;
+      let m = grid[0].length;
+      // Out of boundary
+      if (j1 < 0 || j1 >= m || j2 < 0 || j2 >= m) {
+        return -1e9;
+      }
+  
+      // Base case: last row
+      if (i === n - 1) {
+        if (j1 === j2) {
+          return grid[i][j1];
+        } else {
+          return grid[i][j1] + grid[i][j2];
+        }
+      }
+  
+      if (dp[i][j1][j2] !== null) {
+        return dp[i][j1][j2];
+      }
+  
+      // Cherries collected from current row
+      let cherries = 0;
+  
+      if (j1 === j2) {
+        cherries = grid[i][j1];
+      } else {
+        cherries = grid[i][j1] + grid[i][j2];
+      }
+  
+      let maxCherry = -1e9;
+  
+      // Robot 1 can move: j1 - 1, j1, j1 + 1
+      for (let r1 = j1 - 1; r1 <= j1 + 1; r1++) {
+        // Robot 2 can move: j2 - 1, j2, j2 + 1
+        for (let r2 = j2 - 1; r2 <= j2 + 1; r2++) {
+          maxCherry = Math.max(maxCherry, this.solve(grid, i + 1, r1, r2, dp));
+        }
+      }
+  
+      dp[i][j1][j2] = cherries + maxCherry;
+      return dp[i][j1][j2];
+    }
+  
+    cherryPickup(matrix) {
+      let n = matrix.length;
+      let m = matrix[0].length;
+      // dp[i][j1][j2]
+      const dp = Array.from({ length: n }, () =>
+        Array.from({ length: m }, () =>
+          Array(m).fill(null)
+        )
+      );
+  
+      return this.solve(matrix, 0, 0, m - 1, dp);
+    }
+  }
+  
 
-// Solution
+// Solution II
 class Solution {
     cherryPickupTabulation(matrix){
      let n = matrix.length,
