@@ -75,8 +75,31 @@ What the Algorithm Thinks
     "Can I get better profit if I sell today?"
 */
 
+// Solution I
+class Solution {
+    // Function to calculate the maximum profit earned
+    stockBuySell(arr, n) {
+        let maxProfit = 0;
+        // Initialize mini to the first element of arr
+        let mini = arr[0];
 
-// Solution
+        // Traverse through the array
+        for (let i = 1; i < n; i++) {
+            // Calculate current profit
+            let curProfit = arr[i] - mini;
+            
+            // Update maxProfit if curProfit is larger
+            maxProfit = Math.max(maxProfit, curProfit);
+            
+            // Update mini to minimum value encountered so far
+            mini = Math.min(mini, arr[i]);
+        }
+        // Return the maximum profit
+        return maxProfit;
+    }
+}
+
+// Solution II
 class Solution {
     stockBuySell(arr, n) {
         if(arr.length == 0 || arr.length == 1){
