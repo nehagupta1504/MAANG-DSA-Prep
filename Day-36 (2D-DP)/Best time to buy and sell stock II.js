@@ -115,3 +115,57 @@ Space Complexity -
     For solution II O(n)
     O(n) where n is the depth of the recursion stack plus the space used for the dp table. The dp table consumes O(n) space (n * 2 elements), and the recursion stack reaches a maximum depth of O(n).
 */
+
+
+// Solution III (Tabulation)
+class Solution {
+  // Function to find maximum profit earned using tabulation
+  func(arr, n) {
+      // Create a DP table to memoize results
+      let dp = new Array(n + 1).fill().map(() => new Array(2).fill(-1));
+
+      // Base condition
+      dp[n][0] = dp[n][1] = 0;
+
+      let profit;
+
+      // Loop through the array in reverse order
+      for (let ind = n - 1; ind >= 0; ind--) {
+          for (let buy = 0; buy <= 1; buy++) {
+              // We can buy the stock
+              if (buy === 0) { 
+                  profit = Math.max(0 + dp[ind + 1][0], (-1)*arr[ind] + dp[ind + 1][1]);
+              }
+          
+              // We can sell the stock
+              if (buy === 1) { 
+                  profit = Math.max(0 + dp[ind + 1][1], arr[ind] + dp[ind + 1][0]);
+              }
+
+              dp[ind][buy] = profit;
+          }
+      }
+
+      /* The maximum profit is stored in
+      dp[0][0] after all calculations*/
+      return dp[0][0];
+  }
+
+  // Function to calculate the maximum profit earned
+  stockBuySell(arr, n) {
+      // Return the maximum profit
+      return this.func(arr, n);
+  }
+}
+
+
+/*
+Complexity Analysis
+
+Time Complexity
+  O(n) where n is the length of the array because the nested loops iterate (n * 2) times performing constant time operations.
+
+Space Complexity
+  O(n) where n is the length of the array due to the allocation of a (n+1) * 2 DP table.
+
+*/
