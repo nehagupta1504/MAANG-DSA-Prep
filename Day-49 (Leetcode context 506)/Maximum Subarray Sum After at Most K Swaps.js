@@ -52,7 +52,6 @@ Example 3:
     -105 <= nums[i] <= 105
     0 <= k <= nums.length
 
-    Note: Please do not copy the description during the contest to maintain the integrity of your submissions.
 */
 
 
