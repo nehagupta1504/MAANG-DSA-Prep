@@ -48,6 +48,9 @@ Constraints:
     we don't need to fix right side as all the values from left+1 to right will result in sum < target
     5. so # of subsequence fixing the leftmost side would be 2^numbers from left +1 to right i.e, right-left
     6. Once we calculate it and add it to our answer we move forward to find for left+1
+
+    Note- We use precomputed power of 2's as it can result in overflow by using left shift or pow operator and if 
+    we write a recursive function it also slowers our main loop as we're calculation it again and again
 */
 
 
@@ -88,5 +91,6 @@ var numSubseq = function (nums, target) {
 
 /*
 # Complexity Analysis
-
+    Time Complexity - O(n+n) => O(n)
+    Space Complexity - O(n)
 */
