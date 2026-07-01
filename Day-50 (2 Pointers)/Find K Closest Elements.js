@@ -244,3 +244,44 @@ var findClosestElements = function (arr, k, x) {
     TC: O(n log k + k log k)
     SC: O(k)
 */
+
+// Solution-III Binary Search
+
+/**
+ * @param {number[]} arr
+ * @param {number} k
+ * @param {number} x
+ * @return {number[]}
+ */
+
+var findClosestElements = function (arr, k, x) {
+    let start = findValidWindow(arr, k, x);
+    let ans = [];
+    let i=0;
+    while(i < k){
+        ans.push(arr[start+i]);
+        i++;
+    }
+    return ans;
+}
+function findValidWindow(arr, k, x){
+    let s = 0, e = arr.length- k;
+
+    while(s<e){
+        let mid = s + Math.floor((e-s)/2);
+        // to check valid window check whether our left is giving minm diff, whether to shift the window left or right
+        if(x-arr[mid] > arr[mid+k] -x){
+            // better value exists at right side
+            s = mid+1;
+        }else{
+            e = mid;
+        }
+    }
+    return e;
+}
+
+/*
+Time Complexity - O(logn)
+Space Complexity - O(1)
+
+*/
