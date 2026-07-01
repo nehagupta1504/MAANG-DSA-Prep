@@ -246,6 +246,7 @@ var findClosestElements = function (arr, k, x) {
 */
 
 // Solution-III Binary Search
+// You can watch the intution here- https://youtu.be/AcAVRiAa55A
 
 /**
  * @param {number[]} arr
@@ -285,3 +286,4 @@ Time Complexity - O(logn)
 Space Complexity - O(1)
 
 */
+
