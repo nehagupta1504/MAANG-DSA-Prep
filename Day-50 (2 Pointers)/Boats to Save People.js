@@ -68,5 +68,6 @@ var numRescueBoats = function (people, limit) {
 
 /*
 # Complexity Analysis
-
+   TC  - O(nlogn + n)
+    SC- O(1)
 */
