@@ -63,3 +63,55 @@ class Solution {
     TC- O(E + V) // E- to do E times unionbySize (constant), and V times run the loop to find the parent
     SC- O(V) // for disjoint set internal implementation
 */
+
+
+// Solution -2 // A little optimised
+
+
+/* 
+    Idealogy - 
+    1. Graph can't be connected if no. of existing edges is less than vertices-1
+    2. Total n components every time we join a edge the disconnected components reduce by 1
+    3. Update union function to return whether the edge is merged to form a connected component or not
+*/
+
+/*
+    Updated Union By Size Code
+        unionBySize(u, v) {
+
+        let parentofU = this.getUniversalParent(u);
+        let parentofV = this.getUniversalParent(v);
+
+        if(parentofU == parentofV){
+            return false;
+        }
+
+        if(this.size[parentofU] > this.size[parentofV]){
+            this.parent[parentofV] = parentofU;
+            this.size[parentofU] += this.size[parentofV];
+        }else{
+            this.parent[parentofU] = parentofV;
+            this.size[parentofV] += this.size[parentofU];
+        }
+        return true;
+    }
+
+*/
+
+class Solution {
+    solve(n, Edge) {
+        if(Edge.length < n-1){
+            return -1;
+        }
+        let ds = new DisjointSet(n);
+        let components = n;
+
+        for(let [u,v] of Edge){
+            if(ds.unionBySize(u, v)){
+                components--;
+            }
+        }
+
+        return components-1;
+    }
+}
