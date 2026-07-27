@@ -52,6 +52,11 @@ Example Output
 /*
 # Intuition
     1. Solved using Take or not take approach
+    2. Can also be solved using bit manipulation 
+        1. Consider the number of elements using number for bits ex - 3 elements so 3 bits will be used
+        2. Start a iterator from 0 to 2^n (where n is the no of bits) for each iterator check the bits from 0  to n-1 if its 1 push the corresponding array element in the subset
+        3. Once the subset is ready push it into the res array
+        4. TC - iterate from 0 to (2^n -1), for each iteration we have to go via n bits each time, also copying would take n time so TC - O((2n*2^n), SC - O(n* 2^n)  as each subset will conatain n number
 */
 
 
