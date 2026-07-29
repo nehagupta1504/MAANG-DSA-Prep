@@ -406,3 +406,35 @@ function subsets(arr){
     An explicit stack is useful when recursion depth could become a problem or when the language has a small recursion limit, but for this problem the constraints are small, so I'd prefer recursion for clarity."
 
 */
+
+/*
+    # Modified Questions that can be asked out of this
+    
+    Level-1 (Easy)
+
+    1. Return subsets of size exactly k
+    2. Return subsets of size at most k
+    3. Return subsets of size at least k
+    4. Return only subsets whose sum equals target
+    5. Return subsets whose sum ≤ target
+
+    Level-2 (Medium)
+    6. Array contains duplicates
+    7. Return subsets in lexicographical order
+    8. Return subsets in increasing length
+    9. Return only maximum-length subsets satisfying a condition
+
+    Level 3 (Optimization)
+    11. Count subsets instead of generating
+    12. Does a subset exist?
+    13. Can you prune more?
+    14. Can you solve iteratively?
+    15. Can you solve using bitmask?
+
+
+    Level 4 (Pattern Change)
+    1. Combination Sum
+    2. Combination Sum II
+    3. Combination Sum III and more
+
+*/
