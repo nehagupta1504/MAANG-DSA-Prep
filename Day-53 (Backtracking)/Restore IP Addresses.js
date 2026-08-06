@@ -131,6 +131,12 @@ function buildIPs(s, dotPositions) {
     SC: Auxillary space : O(1) + output space O(k) 
         * At a time only 3 calls can be placed inside a stack
 
+    slice() → O(3) = O(1)
+    Number() → O(3) = O(1)
+    join(".") joins exactly 4 parts → O(1)
+
+    Because the problem guarantees s.length ≤ 12, all these operations are constant time.
+
 */
 
 // SOlution II - we have optimised this code by removing dot and storing the ip parts
