@@ -142,7 +142,7 @@ var restoreIpAddresses = function(s) {
     return restoreIpAddressesHelper(s)
 };
 function restoreIpAddressesHelper(s){
-    if(s.length < 4 && s.length > 12) return [];
+    if(s.length < 4 || s.length > 12) return [];
 
     let res = [];
     let n = s.length;
