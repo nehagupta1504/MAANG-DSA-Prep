@@ -152,7 +152,7 @@ function restoreIpAddressesHelper(s){
             let lastPart = str.slice(start, n);
             if(validPart(lastPart)){
                 parts.push(lastPart)
-                res.push([...parts]);
+                res.push(parts.join("."));
                 parts.pop(lastPart)
             }
             return;
@@ -190,3 +190,70 @@ function validPart(part){
     }
     return true;
 }
+
+// Solution-3 (More optimised as we're not doing slice for every part, once the part become valid then only make the string as it costly operation)
+
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function(s) {
+    return restoreIpAddressesHelper(s)
+};
+function restoreIpAddressesHelper(str){
+    if(str.length < 4 || str.length > 12) return [];
+
+    let res = [];
+    let n = str.length;
+
+    function restore(start, parts){
+        
+        if(parts.length == 3){
+            let lastPart = str.slice(start);
+
+            if (
+                lastPart.length > 0 &&
+                !(lastPart.length > 1 && lastPart[0] === '0') &&
+                Number(lastPart) <= 255
+            ) {
+                parts.push(lastPart);
+                res.push(parts.join("."));
+                parts.pop();
+            }
+            return;
+        }
+        if(start >= n) return;
+
+        let num = 0;
+        for(let end = start; end < Math.min(start+3, n) ; end++){
+            // 1. Removed valid and made it as a part of loop // previous-  let part = str.slice(start, end+1);
+            num = num * 10 + Number(str[end]);
+
+            if(end > start && str[start] == '0'){
+                // leading zero
+                break;
+            }
+            if(num > 255){
+                break;
+            }
+
+            let restPartLength = n- end-1;
+            let partsLen = 4 - parts.length -1;
+            // restpartlength >= partsRemaining, atleast 1 value in each part and < partsRemaining*3
+            if(restPartLength < partsLen || restPartLength > (partsLen*3)){
+                // Invalid conditions
+                continue;
+            }
+            // only doing slice is string passes all checks
+            // backtrack only if valid string
+            parts.push(str.slice(start, end + 1));
+            restore(end+1, parts);
+            parts.pop();
+
+        }
+    }
+
+    restore(0, []);
+    return res;
+}
+
