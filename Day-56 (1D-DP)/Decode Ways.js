@@ -142,18 +142,46 @@ function isValid(part){
 
 /*
 # Intuition II
-    1. Since we know we only can take 2 digits we can reduce the 
+    1. Since we know we only can take 2 digits we can reduce the for loop to only take from start, start+1 and start , start+2
 */
 
 
 // Solution II
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var numDecodings = function (s) {
+    let n = s.length;
 
+    let dp = new Array(n).fill(-1);
+    decodings(n, s, 0, dp);
+    console.log(dp)
+    return dp[0];
+};
+function decodings(n, s, start, dp){
+    if(start > n-1){
+        return 1;
+    }
+    if(start == n-1){
+        return ( dp[start]= s[start] != '0' ? 1: 0)
+    }
+    if(dp[start] != -1) return dp[start];
 
+    let validPartitons = 0;
 
+    for(let end = start ; end < start+2 ; end++){
+        if(s[start] == '0' || Number(s.slice(start, end+1)) > 26) continue;
+        validPartitons += decodings(n, s, end+1, dp)
+    }
+
+    return (dp[start] = validPartitons);
+}
 
 /*
 # Complexity Analysis
-
+    TC: O(n)
+    SC: O(n)
 */
 
 
