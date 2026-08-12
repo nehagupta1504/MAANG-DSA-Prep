@@ -217,7 +217,7 @@ function breakWordIterative(s, wordDict){
     dp[n] = true;
 
     for(let start= n-1; start>=0 ; start--){
-        for(let end = start+1; **end <= Math.min(start+maxLengthWord, n)** ; end++){
+        for(let end = start+1; end <= Math.min(start+maxLengthWord, n) ; end++){
             if(dp[end] && wordSet.has(s.substring(start, end))){
                 dp[start] = true;
                 break;
