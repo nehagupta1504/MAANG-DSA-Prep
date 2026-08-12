@@ -207,4 +207,25 @@ function breakWordIterative(s, wordDict){
 
 */
 
+// Solution III (With pruning)
+function breakWordIterative(s, wordDict){
+    let wordSet = new Set(wordDict);
+    let n  = s.length;
+    let dp = new Array(n+1).fill(false);
+    // Pruning if max word length is k we don't have to go and form a word segment of more than that length
+    let maxLengthWord = Math.max(...wordDict.map(w=>w.length));
+    dp[n] = true;
+
+    for(let start= n-1; start>=0 ; start--){
+        for(let end = start+1; **end <= Math.min(start+maxLengthWord, n)** ; end++){
+            if(dp[end] && wordSet.has(s.substring(start, end))){
+                dp[start] = true;
+                break;
+            }
+        }
+    }
+    return dp[0];
+}
+
+
 // Solution IV (Optimised) Using Trie
