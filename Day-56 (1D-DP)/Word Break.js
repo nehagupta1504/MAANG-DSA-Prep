@@ -226,6 +226,14 @@ function breakWordIterative(s, wordDict){
     }
     return dp[0];
 }
+/*
+# Complexity Analysis III Pruning
+    TC: O(n*k^2)
+        1. states: n
+        2. Work per state : loop to k times * (substring length is k + hashset check O(k))
+        3. O(n*k^2)
+    SC: Same as earlier
+*/
 
 
 // Solution IV (Optimised) Using Trie
