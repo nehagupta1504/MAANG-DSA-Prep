@@ -132,4 +132,79 @@ function breakWord(s, wordDict){
         wordSet → O(D)
 */
 
-// Solution II (Optimised) Using Trie
+// Solution II (Added pruning)
+/**
+ * @param {string} s
+ * @param {string[]} wordDict
+ * @return {boolean}
+ */
+var wordBreak = function(s, wordDict) {
+    return breakWord(s, wordDict);
+};
+
+function breakWord(s, wordDict){
+    let wordSet = new Set(wordDict);
+    let n  = s.length;
+    let dp = new Array(n).fill(-1);
+    // Pruning -  if max word length is k we don't have to go and form a word segment of more than that length
+    let maxLengthWord = Math.max(...wordDict.map(w=>w.length));
+
+
+    function breakWordHelper(s, start, dp){
+        if(start == s.length){
+            return true;
+        }
+        if(dp[start]!= -1){
+            return dp[start];
+        }
+        let wordFound = false;
+        for(let i = start ; i < Math.min(start+ maxLengthWord, n) ; i++){
+            let word = s.substring(start, i+1)
+            if(wordSet.has(word)){
+                if(breakWordHelper(s, i+1, dp)){
+                    dp[start] = true;
+                    return dp[start];
+                }
+            }
+        }
+        return (dp[start] = false);
+    }
+
+    breakWordHelper(s, 0, dp);
+    return dp[0];
+}
+/*
+# Complexity Analysis II
+    TC: O(n*k^2)
+        1. states: n
+        2. Work per state : loop to k times * (substring length is k + hashset check O(k))
+        3. O(n*k^2)
+    SC: Same as earlier
+*/
+
+// Solution III (Itertaive Approach)
+function breakWordIterative(s, wordDict){
+    let wordSet = new Set(wordDict);
+    let n  = s.length;
+    let dp = new Array(n+1).fill(false);
+    dp[n] = true;
+
+    for(let start= n-1; start>=0 ; start--){
+        for(let end = start+1; end <=n ; end++){
+            if(dp[end] && wordSet.has(s.substring(start, end))){
+                dp[start] = true;
+                break;
+            }
+        }
+    }
+    return dp[0];
+}
+
+/*
+    Complexity Analysis III
+    TC: O(n^3)
+    SC: O(D+n)
+
+*/
+
+// Solution IV (Optimised) Using Trie
