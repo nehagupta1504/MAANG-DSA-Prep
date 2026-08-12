@@ -74,7 +74,9 @@ function uniquePathshelper(m, n){
     }
     return dp[0];
 }
-
+/*
+    Note: Since only 1 row is required at a time and we need computation of right side columns thus 1D Dp is sufficient for this problem
+*/
 /*
 # Complexity Analysis
     TC: O(m*n)
