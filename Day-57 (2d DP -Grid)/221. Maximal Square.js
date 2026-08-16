@@ -126,5 +126,64 @@ function maximalSquareDP(grid){
 
 /*
 # Complexity Analysis
+    TC: O(m*n)
+    SC: O(m*n)
+*/
 
+// Solution II (Space Optimised) 2D DP
+var maximalSquare = function(matrix) {
+    return maximalSquareDP(matrix)
+};
+
+function maximalSquareDP(grid){
+    let m = grid.length, n = grid[0].length;
+    let dp = Array.from({length:2}, ()=> new Array(n).fill(0))
+
+    let max = 0;
+    for(let i = m-1; i>= 0 ; i--){
+        for(let j=0; j < n; j++){
+            if(j == 0 || i == m-1){
+                dp[i%2][j] = Number(grid[i][j]);
+                max = Math.max(dp[i%2][j], max);
+                continue;
+            }
+            dp[i%2][j] = grid[i][j] == "0" ? 0: Math.min(dp[i%2][j-1], dp[(i+1)%2][j-1], dp[(i+1)%2][j]) + 1;
+            max = Math.max(dp[i%2][j], max);
+        }
+    }
+    return max*max;
+}
+
+// Solution III (1D- DP)
+function maximalSquareDP(grid){
+    let m = grid.length, n = grid[0].length;
+    let dp = new Array(n).fill(0);
+
+    let max = 0;
+    for(let i = m-1; i>= 0 ; i--){
+        let diagonal = 0;
+        for(let j=0; j < n; j++){
+            const temp = dp[j];
+
+            if (grid[i][j] === "1") {
+                dp[j] = Math.min(
+                    dp[j],        // bottom
+                    dp[j - 1] ?? 0, // left
+                    diagonal      // bottom-left
+                ) + 1;
+
+                max = Math.max(max, dp[j]);
+            } else {
+                dp[j] = 0;
+            }
+
+            diagonal = temp;
+        }
+    }
+    return max*max;
+}
+/*
+# Complexity Analysis
+    TC: O(m*n)
+    SC: O(n)
 */
