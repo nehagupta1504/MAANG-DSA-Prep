@@ -187,3 +187,38 @@ function maximalSquareDP(grid){
     TC: O(m*n)
     SC: O(n)
 */
+
+
+// Solution IV (In-place)
+function maximalSquareDP(grid){
+    let m = grid.length, n = grid[0].length;
+
+    let max = 0;
+
+    for(let i= 0; i < n; i++){
+        grid[m-1][i] = grid[m-1][i]  === "1" ? 1: 0;
+        max = Math.max(grid[m-1][i], max)
+    }
+
+    for(let i = m-2; i>= 0 ; i--){
+        for(let j=0; j < n; j++){
+            if (grid[i][j] === "1") {
+                grid[i][j] = Math.min(
+                    grid[i][j-1] ?? 0,        // bottom
+                    grid[i+1][j - 1] ?? 0, // left
+                    grid[i+1][j]      // bottom-left
+                ) + 1;
+            } else {
+                grid[i][j]= 0;
+            }
+            max = Math.max(grid[i][j], max)
+        }
+    }
+    return max*max;
+}
+
+/*
+# Complexity Analysis
+    TC: O(m*n)
+    SC: O(1)
+*/
