@@ -90,3 +90,48 @@ function DG(dungeon){
     TC: O(m*n)
     TC: O(m*n)
 */
+
+
+// Solution II (Space Optimised)
+/**
+ * @param {number[][]} dungeon
+ * @return {number}
+ */
+var calculateMinimumHP = function(dungeon) {
+    return DG(dungeon);
+};
+
+
+function DG(dungeon){
+    let m = dungeon.length, n = dungeon[0].length;
+    let dp = new Array(n).fill(0);
+
+    for(let i= m-1; i>=0 ; i--){
+        for(let j = n-1; j>= 0; j--){
+
+            let health = 0;
+            if(i == m-1 && j == n-1){
+                health =  dungeon[i][j];
+            }
+            else if(i == m-1){
+               health =  dungeon[i][j] + dp[j+1];
+            }else if(j == n-1){
+                health =  dungeon[i][j] + dp[j];
+            }else{
+                health = dungeon[i][j] + Math.max(dp[j+1], dp[j])
+            }
+
+            dp[j] = health > 0 ? 0: health;
+        }
+
+    }
+    return Math.abs(dp[0])+1;
+}
+
+/*
+# Complexity Analysis
+    TC: O(m*n)
+    TC: O(n)
+*/
+
+// Note  - This can also be done inplace and in that case SC will become O(1)
