@@ -36,8 +36,9 @@
 
 /*
 # Intuition
-    dp[i][j] =>  Number of ways to reach target using elements from ith to n-1th index, given that current sum is j
-    1. 
+    dp[i][value] =>  Starting at index i, with current sum value, how many ways can I eventually reach target?
+    Number of ways to reach target starting from index i, when the current sum is value.
+
 */
 
 
@@ -84,4 +85,86 @@ function targetSum(nums, target){
     SC: 
     Without DP - Auxillary space (stack) - O(n)=> O(n)
     With DP - O(n*2k) + O(n) stack => Overall - O(nk)
+*/
+
+// Solution II- Iterative
+
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    return targetSum(nums, target)
+};
+
+function targetSum(nums, target){
+    let count =0;
+    let n  = nums.length;
+    let maxValue = nums.reduce((acc, el)=> acc+el, 0);
+
+    let dp = Array.from({length: n+1}, ()=> new Array(2*maxValue + 1).fill(0));
+    
+    let updatedTargetIndex = target+maxValue;
+
+    // setting the base case
+    dp[n][updatedTargetIndex] = 1;
+
+    for(let i = n-1; i>=0 ; i--){
+        for(let j = 0; j <= 2*maxValue; j++){
+            if(j - nums[i] >= 0){
+                 dp[i][j] = dp[i+1][j-nums[i]]
+            }
+            if(j+nums[i] <= 2*maxValue){
+                 dp[i][j] += dp[i+1][j+nums[i]]; 
+            }
+        }
+    }
+    return dp[0][maxValue];
+}
+
+
+// Solution - III (Space Optimised)
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var findTargetSumWays = function(nums, target) {
+    return targetSum(nums, target)
+};
+
+function targetSum(nums, target){
+    let count =0;
+    let n  = nums.length;
+    let maxValue = nums.reduce((acc, el)=> acc+el, 0);
+
+    let dp = Array.from({length: 2}, ()=> new Array(2*maxValue + 1).fill(0));
+    
+    let updatedTargetIndex = target+maxValue;
+
+    // setting the base case
+    dp[n%2][updatedTargetIndex] = 1;
+
+    for(let i = n-1; i>=0 ; i--){
+        for(let j = 0; j <= 2*maxValue; j++){
+            if(j - nums[i] >= 0){
+                 dp[i%2][j] = dp[(i+1)%2][j-nums[i]]
+            }
+            if(j+nums[i] <= 2*maxValue){
+                 dp[i%2][j] += dp[(i+1)%2][j+nums[i]]; 
+            }
+        }
+    }
+    return dp[0][maxValue];
+}
+
+
+
+/*
+# Complexity Analysis
+    TC: O(n*k) to be exact n*2k+1 where k is the sum of all elements of nums array since we can have n*(2k+1) unique states only
+
+    SC: 
+    With DP - O(2*2k)=> O(k)
 */
