@@ -78,7 +78,7 @@ Number of States
         = O(kmn)
     Memoized TC: O(kmn)
     Memoized SC: O(kmn)
-    
+
 0/1 Knapsack Mapping
     Item → String
     Capacity → m zeros + n ones
@@ -142,3 +142,63 @@ function countZeroAndOne(str){
     TC: O(k*m*n), If we don't precompute count of zeroes and ones then TC would have been O(k*m*n*L) where L is the max length of each string
     SC: O(n + k*m*n) 
 */
+
+// SOlution II - Itertaive
+
+// Itertaive
+function  zeroesAndOnesIterative(strs, m , n){
+    let size = strs.length;
+   let dp = Array.from({length:size+1}, ()=> Array.from({length: m+1}, ()=> new Array(n+1).fill(0)));
+   let counts = strs.map(str=> countZeroAndOne(str));
+
+   for(let i = size-1; i >=0 ; i--){
+       let {zeroCount, oneCount} = counts[i]
+       for(let j = m; j>=0; j--){
+           for(k = n; k>=0; k--){
+               if( (j-zeroCount >=0) && (k-oneCount >=0))
+                   dp[i][j][k] = Math.max(1+ dp[i+1][j-zeroCount][k-oneCount], dp[i+1][j][k]);
+               else
+                   dp[i][j][k] = dp[i+1][j][k]
+           }
+       }
+   }
+   return dp[0][m][n]
+}
+
+/*
+# Complexity Analysis
+    TC: O(k*m*n), If we don't precompute count of zeroes and ones then TC would have been O(k*m*n*L) where L is the max length of each string
+    SC: O(k*m*n) 
+*/
+
+// Solution III - Itertaive (Space Optimised- 2D DP)
+
+// Itertaive
+function  zeroesAndOnesIterative(strs, m , n){
+    let size = strs.length;
+   let dp = Array.from({length: 2}, ()=> Array.from({length: m+1}, ()=> new Array(n+1).fill(0)));
+   let counts = strs.map(str=> countZeroAndOne(str));
+
+   for(let i = size-1; i >=0 ; i--){
+       let {zeroCount, oneCount} = counts[i]
+       for(let j = m; j>=0; j--){
+           for(k = n; k>=0; k--){
+               if( (j-zeroCount >=0) && (k-oneCount >=0))
+                   dp[i%2][j][k] = Math.max(1+ dp[(i+1)%2][j-zeroCount][k-oneCount], dp[(i+1)%2][j][k]);
+               else
+                   dp[i%2][j][k] = dp[(i+1)%2][j][k]
+           }
+       }
+   }
+   return dp[0][m][n]
+}
+
+
+
+/*
+# Complexity Analysis
+    TC: O(k*m*n), If we don't precompute count of zeroes and ones then TC would have been O(k*m*n*L) where L is the max length of each string
+    SC: O(2*m*n) => O(mn)
+*/
+
+//Note: This can be more optimised in terms of readability and can be made proper 2D Dp
