@@ -294,7 +294,7 @@ class MinHeap {
         Ex - If we fill 6th slot, then we make its value 5 and let's suppose 5 is already filled so it'll point to 4 and now 4 is empty so
         using universal parent we can reach to 4 from 6.
         2.3 Getting emoty slot is find till parent[index] == index
-        2.4 If anytime any slot is returning -1, it means all slots lower to that has been filled 
+        2.4 If anytime any slot is returning -1, it means all slots lower to that has been filled` 
 }
 */
 
