@@ -109,34 +109,45 @@ class Solution {
 
 
 // Solution -II (Tabulation)
-class Solution {
-    knapsack01Tabulation(wt, val, n, W) {
-      let dp = Array.from({ length: n+1 }, () => new Array(W + 1).fill(0));
-  
-      for(let i = n-1; i >= 0; i--){
-          for(let w = 1; w <= W; w++){
-              if(w >= wt[i]){
-                  dp[i][w] = Math.max(val[i] + dp[i+1][w-wt[i]], dp[i+1][w]);
-              }else{
-                  dp[i][w] = dp[i+1][w];
-              }
-          }
-      }
-      return dp[0][W]
+function iterativeKanpsack(profits, weights, C){
+    let n = profits.length;
+	let dp = Array.from({length: n+1}, ()=> new Array(C+1).fill(0));
+
+
+    for(let i = n-1; i>= 0; i--){
+        for(let j = 0; j<= C; j++){
+            let take = j >= weights[i] ? profits[i] + dp[i+1][j-weights[i]]: 0;
+            let notTake = dp[i+1][j];
+            dp[i][j] = Math.max(take, notTake);
+        }
     }
-    knapsack01(wt, val, n, W) {
-      return this.knapsack01Tabulation(wt, val, n, W);
-    }
-  }
-  
+    return dp[0][C];
+}
 
 /*
 # Complexity Analysis
 
 Time Complexity
-    O(n * W) where n is the number of items and W is the capacity; initializing the dp table takes O(n * W) and there are n * W unique states calculated once in the recursion.
+    O(n*C) where n is the number of items and W is the capacity; initializing the dp table takes O(n * W) and there are n * W unique states calculated once in the recursion.
 
 Space Complexity
-    O(n * W) where n is the number of items and W is the capacity; this is used for the dp table storage and the recursion stack depth which is O(n).
+    O(n*C) where n is the number of items and W is the capacity; this is used for the dp table storage and the recursion stack depth which is O(n).
 
 */
+
+// Solution- III (Space Optimised) with O(C) space only
+
+function iterativeKanpsack(profits, weights, C){
+    let n = profits.length;
+	let dp =  new Array(C+1).fill(0);
+
+
+    for(let i = n-1; i>= 0; i--){
+        for(let j = C; j>=0; j--){
+            let take = j >= weights[i] ? profits[i] + dp[j-weights[i]]: 0;
+            let notTake = dp[j];
+            dp[j] = Math.max(take, notTake);
+        }
+    }
+    return dp[C];
+}
