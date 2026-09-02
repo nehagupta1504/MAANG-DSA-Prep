@@ -53,6 +53,31 @@ class Solution {
     }
 }
 
+// One more way (Recursive)
+function cuttingRod(price){
+    let n = price.length;
+    let dp = new Array(n+1).fill(-1);
+
+    function cuttingRodHelper(rod){
+        if(rod == 1){
+            // can't cut further
+            return price[rod-1];
+        }
+        if(dp[rod] != -1) return dp[rod];
+
+        let maxPrice =0;
+
+        // try cutting keep one length fix (can't cut) and other side variable that can be cut
+        for(let cut = 1; cut < rod; cut++){
+            maxPrice = Math.max(maxPrice, price[cut-1] + cuttingRodHelper(rod-cut));
+        }
+        // if don't cut
+        maxPrice = Math.max(maxPrice, price[rod-1]);
+        return dp[rod] = maxPrice;
+    }
+    return cuttingRodHelper(n);
+}
+
 /*
 # Complexity Analysis
 
@@ -94,3 +119,30 @@ Time Complexity
 Space Complexity
     O(N^2) where N is the length of the rod. The algorithm allocates a 2D array of size (N+1)x(N+2) to store the intermediate results, requiring O(N^2) space.
 */
+
+// Solution - III (Iterative)
+function rodCutItertive(price){
+    let n = price.length;
+    let maxPrice = new Array(n+1).fill(0);
+
+    maxPrice[1] = price[0];
+    for(let i = 2; i<= n ;i++){
+        for(let cut = 1; cut < i; cut++){
+            maxPrice[i] = Math.max(maxPrice[i] , price[cut-1] + maxPrice[i-cut]);
+        }
+        maxPrice[i] = Math.max(maxPrice[i], price[i-1]);
+    }
+    return maxPrice[n];
+}
+
+/*
+# Complexity Analysis
+
+Time Complexity
+    O(N^2) where N is the length of the rod. The tabulation method initializes an (N+1)x(N+2) DP table in O(N^2) time, followed by nested loops where the outer loop runs N times and the inner loop runs N times, resulting in a total complexity of O(N^2).
+
+Space Complexity
+    O(N) where N is the length of the rod.
+*/
+
+
