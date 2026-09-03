@@ -121,3 +121,67 @@ Space complexity:
 
     for the memoization map and recursion stack.
 */
+
+// Optimised 1D - DP
+
+/*
+    Intuition
+    1. Every stone is either assigned to Group A or Group B.
+        Ex- a+b-c+d-e => (a+b+d)- (c+e)=> Group A => (a+b+d), Group B=> (c+e)
+    2. total = sum of all stones, If Group A has sum x
+    then Group B sum => total - x
+    3. The final difference is: x - (total-x) => Group A - Group B
+    4. x = total/2, So we want to find a subset whose sum is as close as possible to: This converts the problem into a 0/1 Knapsack / Subset Sum problem.
+    5. Ex- [2, 7, 4, 1, 8, 1]
+        Total= 23
+        x = 23/2 = 11.5
+        Suppose we find: 2 + 7 + 1 + 1 = 11 (Group A), then other group 23-11 => 12 Diff would be 12-11= 1
+    
+        Conclusion- We only need to find the maximum subset sum ≤ total / 2.
+
+*/
+// Recursive approach logic
+function lSWIIOptimised(arr){
+    let total = arr.reduce((acc, el)=> acc + el, 0);
+    let targetSum = Math.floor(total/2);
+    let n = arr.length;
+
+    function maxSubsetSum(i, sum){
+        if(i == n && sum <= targetSum){
+            return Math.abs(sum);
+        }
+        if(i == n){
+            return 0;
+        }
+        return Math.max(maxSubsetSum(i+1, sum+arr[i]), maxSubsetSum(i+1, sum));
+    }
+    let nearTargetSum =  maxSubsetSum(0, 0);
+    return total - nearTargetSum - nearTargetSum;
+}
+
+// Tabulation approach
+
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+var lastStoneWeightII = function(stones) {
+    let total = stones.reduce((sum, stone) => sum + stone, 0);
+    let target = Math.floor(total / 2);
+
+    let dp = new Array(target + 1).fill(false);
+    dp[0] = true;
+
+    for (let stone of stones) {
+        for (let sum = target; sum >= stone; sum--) {
+            dp[sum] = dp[sum] || dp[sum - stone];
+        }
+    }
+
+    for (let sum = target; sum >= 0; sum--) {
+        if (dp[sum]) {
+            return total - 2 * sum;
+        }
+    }
+};
+
