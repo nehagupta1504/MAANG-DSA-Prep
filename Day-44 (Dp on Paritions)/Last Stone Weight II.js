@@ -64,7 +64,9 @@ Constraints:
     However if we combine 5 & 5 it becomes 10 and then we can minimise 15 as much as possible
 
     Similarly If we find all combinations of + and - between all the numbers there will be qution which will give us minm sum and that will be our answer
-    
+
+    Note- By combining powers I mean we smash smaller stones with bigger one, one by one instead of crashing them all together
+
 */
 
 
