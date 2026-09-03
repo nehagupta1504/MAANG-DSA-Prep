@@ -55,6 +55,16 @@ Constraints:
     This gives us a simple recursive solution.
 
     However, the same (i, sum) state can be reached through multiple paths, so we use memoization to avoid solving the same state again.
+
+    # In Simple Language
+    We need to figure out the arrnagement of stones to smash such that we get smallest stone at last
+    Think of it like we can combine the power of smaller stone and smash into bigger one to neutraise it.
+    For ex - [5,5,15]
+    now if we subtract 5,5 with each other 15 will be the greastest stone left, which is not an optimal answer
+    However if we combine 5 & 5 it becomes 10 and then we can minimise 15 as much as possible
+
+    Similarly If we find all combinations of + and - between all the numbers there will be qution which will give us minm sum and that will be our answer
+    
 */
 
 
