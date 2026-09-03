@@ -89,3 +89,39 @@ class Solution {
     Space Complexity
         O(N * amount), as a 2D array of size (N + 1) x (amount + 1) is allocated to store the DP states.
 */
+
+// Solution - III (Space optimised Tabulation)
+
+function coinChangeIterative(coins, sum){
+    let n = coins.length;
+   let dp = new Array(sum+1).fill(0);
+   let mod = 1e6+7;
+
+   dp[0] = 1;
+
+   for(let i = n-1; i>=0 ; i--){
+       for(let j = 1; j<= sum ;j++){
+           dp[j] = ((j - coins[i] >= 0 ?
+                            dp[j-coins[i]]: 0
+                       ) + dp[j])%mod;
+       }
+   }
+   return dp[sum];
+}
+
+// More optimised
+function coinChangeIterative(coins, sum){
+    let n = coins.length;
+   let dp = new Array(sum+1).fill(0);
+   // let mod = 1e6+7;
+
+   dp[0] = 1;
+
+   for(let i = n-1; i>=0 ; i--){
+       for(let j = coins[i]; j<= sum ;j++){
+        // we need j to be always >= coins[i] otherwise we're assigning dp[j] = dp[j], so the minm value of j can be coins[i]
+           dp[j] = dp[j-coins[i]] + dp[j];
+       }
+   }
+   return dp[sum];
+}
