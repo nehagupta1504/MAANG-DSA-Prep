@@ -49,48 +49,326 @@ Example 2
         Many recursion paths revisit the same (index, sumSofar) state. dp[i][sumSofar] stores already-computed answers so we don’t solve the same subproblem again, making the solution much faster.
 */
 
+/**
+ * LeetCode: 416. Partition Equal Subset Sum
+ *
+ * # Intuition
+ *
+ * If the total sum is odd, we cannot divide the array
+ * into two subsets with equal sums.
+ *
+ * Otherwise, we only need to find whether there exists
+ * a subset whose sum is:
+ *
+ *      totalSum / 2
+ *
+ * This converts the problem into a classic Subset Sum /
+ * 0-1 Knapsack problem.
+ *
+ * For every number, we have two choices:
+ *
+ * 1. Take the number
+ * 2. Don't take the number
+ *
+ *
+ * ============================================================
+ * Solution I — Recursion + Memoisation
+ * ============================================================
+ *
+ * State:
+ *
+ *      dp[i][sum]
+ *
+ * Meaning:
+ * Can we form `sum` using elements from index `i` onwards?
+ *
+ * Recurrence:
+ *
+ *      take:
+ *      findTargetSum(i + 1, sum - nums[i])
+ *
+ *      notTake:
+ *      findTargetSum(i + 1, sum)
+ *
+ * If either choice works, the answer is true.
+ *
+ * Time Complexity:
+ *      O(N * targetSum)
+ *
+ * Space Complexity:
+ *      O(N * targetSum) for DP
+ *      + O(N) recursion stack
+ */
 
-// Solution
-class Solution {
-    isSubsetSumMemoization(arr, i, sumSofar, target, dp) {
-     if (target == sumSofar) {
-         return true;
-     }
-     if(sumSofar > target || i == arr.length){
-         return false;
-     }
-     if(dp[i][sumSofar] != -1){
-         return dp[i][sumSofar];
-     }
-     return dp[i][sumSofar] =  (
-       this.isSubsetSumMemoization(arr, i + 1, sumSofar + arr[i], target, dp) ||
-       this.isSubsetSumMemoization(arr, i + 1, sumSofar, target, dp)
-     );
-   }
-   equalPartition(n, arr) {
-     if (n == 0) {
-       return true;
-     }
-     if (n == 1) {
-       return false;
-     }
- 
-     let sum = arr.reduce((acc, el) => acc + el, 0);
-     if (sum % 2 != 0) return false;
-     let target = sum/2;
-     
-     let dp = Array.from({length: n+1}, ()=> new Array(target+1).fill(-1))
-     return this.isSubsetSumMemoization(arr, 0, 0, target, dp);
-   }
- }
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    return partitionSubset(nums);
+};
+
+function partitionSubset(nums) {
+    const totalSum = nums.reduce((sum, num) => sum + num, 0);
+
+    if (totalSum % 2 !== 0) {
+        return false;
+    }
+
+    const n = nums.length;
+    const targetSum = totalSum / 2;
+
+    const dp = Array.from(
+        { length: n },
+        () => new Array(targetSum + 1).fill(-1)
+    );
+
+    function findTargetSum(i, sum) {
+
+        if (sum === 0 && i === n) {
+            return true;
+        }
+
+        if (sum < 0 || i === n) {
+            return false;
+        }
+
+        if (dp[i][sum] !== -1) {
+            return dp[i][sum];
+        }
+
+        const take = findTargetSum(
+            i + 1,
+            sum - nums[i]
+        );
+
+        const notTake = findTargetSum(
+            i + 1,
+            sum
+        );
+
+        return dp[i][sum] = take || notTake;
+    }
+
+    return findTargetSum(0, targetSum);
+}
 
 
 /*
-# Complexity Analysis
+ * ============================================================
+ * Solution II — Bottom-Up Tabulation
+ * ============================================================
+ *
+ * We can convert the recursive solution into an iterative DP.
+ *
+ * dp[i][sum] means:
+ *
+ *      Can we form `sum` using elements from index `i`
+ *      onwards?
+ *
+ * At every element:
+ *
+ *      Take:
+ *      dp[i + 1][sum - nums[i]]
+ *
+ *      Don't Take:
+ *      dp[i + 1][sum]
+ *
+ * Therefore:
+ *
+ *      dp[i][sum] =
+ *          dp[i + 1][sum - nums[i]]
+ *          ||
+ *          dp[i + 1][sum]
+ *
+ * Base case:
+ *
+ *      dp[n][0] = true
+ *
+ * because with no elements left, we can always form
+ * a sum of 0.
+ *
+ * Time Complexity:
+ *      O(N * targetSum)
+ *
+ * Space Complexity:
+ *      O(N * targetSum)
+ */
 
-Time Complexity
-    O(n * target), where n is the length of the array and target is the sum/2. The dp table has n * target states, and each state is computed exactly once.
+function partitionSubsetIterative(nums) {
+    const totalSum = nums.reduce((sum, num) => sum + num, 0);
 
-Space Complexity
-    O(n * target) for the 2D dp table initialization, plus O(n) stack space for recursion depth.
-*/
+    if (totalSum % 2 !== 0) {
+        return false;
+    }
+
+    const n = nums.length;
+    const targetSum = totalSum / 2;
+
+    const dp = Array.from(
+        { length: n + 1 },
+        () => new Array(targetSum + 1).fill(false)
+    );
+
+    dp[n][0] = true;
+
+    for (let i = n - 1; i >= 0; i--) {
+
+        for (let sum = 0; sum <= targetSum; sum++) {
+
+            if (sum < nums[i]) {
+                dp[i][sum] = dp[i + 1][sum];
+                continue;
+            }
+
+            const take = dp[i + 1][sum - nums[i]];
+            const notTake = dp[i + 1][sum];
+
+            dp[i][sum] = take || notTake;
+        }
+    }
+
+    return dp[0][targetSum];
+}
+
+
+/*
+ * ============================================================
+ * Solution III — Space Optimised Tabulation
+ * ============================================================
+ *
+ * In the 2D DP solution, dp[i][sum] only depends on:
+ *
+ *      dp[i + 1][...]
+ *
+ * So we don't need to store all N rows.
+ *
+ * We can reduce the DP to:
+ *
+ *      dp[sum]
+ *
+ * dp[sum] means:
+ *
+ *      Can we currently form this sum?
+ *
+ * Initially:
+ *
+ *      dp[0] = true
+ *
+ * because selecting nothing gives a sum of 0.
+ *
+ *
+ * The transition becomes:
+ *
+ *      dp[sum] =
+ *          dp[sum] ||
+ *          dp[sum - nums[i]]
+ *
+ *
+ * IMPORTANT:
+ *
+ * We iterate `sum` backwards.
+ *
+ * Why?
+ *
+ * Because this is a 0/1 Knapsack problem and every number
+ * can be used only once.
+ *
+ * If we iterate forwards, an updated value could be reused
+ * in the same iteration, which would allow the same number
+ * to be used multiple times.
+ *
+ * Backward iteration prevents that.
+ *
+ *
+ * Time Complexity:
+ *      O(N * targetSum)
+ *
+ * Space Complexity:
+ *      O(targetSum)
+ */
+
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canPartition = function(nums) {
+    return partitionSubsetIterative(nums);
+};
+
+function partitionSubsetIterative(nums) {
+    const totalSum = nums.reduce((sum, num) => sum + num, 0);
+
+    if (totalSum % 2 !== 0) {
+        return false;
+    }
+
+    const targetSum = totalSum / 2;
+
+    const dp = new Array(targetSum + 1).fill(false);
+
+    dp[0] = true;
+
+    for (const num of nums) {
+
+        for (let sum = targetSum; sum >= num; sum--) {
+            dp[sum] = dp[sum] || dp[sum - num];
+        }
+    }
+
+    return dp[targetSum];
+}
+
+
+/*
+ * ============================================================
+ * Final Comparison
+ * ============================================================
+ *
+ * Solution I:
+ *
+ *      Recursion + Memoisation
+ *
+ *      Time:  O(N * targetSum)
+ *      Space: O(N * targetSum)
+ *
+ *
+ * Solution II:
+ *
+ *      2D Tabulation
+ *
+ *      Time:  O(N * targetSum)
+ *      Space: O(N * targetSum)
+ *
+ *
+ * Solution III:
+ *
+ *      1D Space Optimised DP
+ *
+ *      Time:  O(N * targetSum)
+ *      Space: O(targetSum)
+ *
+ *
+ * Pattern:
+ *
+ *      Equal Partition
+ *             ↓
+ *      Total Sum / 2
+ *             ↓
+ *        Subset Sum
+ *             ↓
+ *       0/1 Knapsack
+ *             ↓
+ *          1D DP
+ *
+ *
+ * Key takeaway:
+ *
+ * "Can I divide the array into two equal subsets?"
+ *
+ * becomes:
+ *
+ * "Can I find one subset with sum = totalSum / 2?"
+ */
